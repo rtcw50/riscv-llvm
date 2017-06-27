@@ -39,7 +39,8 @@ defm FDIV_S : FPBinOps<"fdiv.s", fdiv, 0b00011, 0b00>, Requires<[HasF]>;
 //defm FMIN_S : FPOps<"fmin.s", fmin, 0b11000, 0b00>, Requires<[HasF]>;
 //defm FMAX_S : FPOps<"fmax.s", fmax, 0b11001, 0b00>, Requires<[HasF]>;
 
-//TODO: implement fma
+def FMADD_S : InstFP_Op<"fmadd.s", 0b1000011, 0b000, 0b00, (outs FP32:$dst), (ins FP32:$src1, FP32:$src2, FP32:$src3),
+  [(set FP32:$dst, (fma FP32:$src1, FP32:$src2, FP32:$src3))]>, Requires<[HasF]>;
 
 //Move and Conversions
 class InstConv<string mnemonic, string rmstr, bits<7> op, bits<5> funct5, bits<2> fmt, bits<3> rm,

@@ -1,0 +1,32 @@
+//; RUN: clang -target riscv64-qsys -mriscv=RV64IAMFD -O2 -S -x c++ -ffp-contract=off  %s -o %t 
+//; RUN: cat %t | FileCheck %s
+//; CHECK-NOT: fmadd.d
+
+
+union { double d; long l; } dl;
+
+__attribute__((noinline)) void getdm(double *d) {
+ long x = 0xc029955555555556;
+ dl.l = x;
+ *d = dl.d;
+}
+__attribute__((noinline)) void getdm2(double *d) {
+ long x = 0x4084b43f8e38e38f;
+ dl.l = x;
+ *d = dl.d;
+}
+
+int main()
+{
+
+#pragma STDC FP_CONTRACT ON 
+  double dm, dm2;
+  getdm(&dm);
+  getdm2(&dm2);
+  dm2 += dm * dm;
+  dl.d = dm2;
+
+  return dl.l;
+
+}
+

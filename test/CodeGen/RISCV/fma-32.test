@@ -1,0 +1,33 @@
+//; RUN: clang -target riscv-qsys -mriscv=RV32IAMFD -O2 -S -x c++  %s -o %t 
+//; RUN: cat %t | FileCheck %s
+//; CHECK: main:
+//; CHECK: fmadd.s
+
+
+union { float d; int l; } dl;
+
+__attribute__((noinline)) void getdm(float *d) {
+ int x = 0xc0299555;
+ dl.l = x;
+ *d = dl.d;
+}
+__attribute__((noinline)) void getdm2(float *d) {
+ int x = 0x4084b43f;
+ dl.l = x;
+ *d = dl.d;
+}
+
+int main()
+{
+
+#pragma STDC FP_CONTRACT ON 
+  float dm, dm2;
+  getdm(&dm);
+  getdm2(&dm2);
+  dm2 += dm * dm;
+  dl.d = dm2;
+
+  return dl.l;
+
+}
+

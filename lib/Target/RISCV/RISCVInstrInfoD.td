@@ -39,7 +39,8 @@ defm FDIV_D : FPBinOps64<"fdiv.d", fdiv, 0b00011, 0b01>, Requires<[HasD]>;
 //defm FMIN_S : FPOps<"fmin.s", fmin, 0b11000, 0b00>, Requires<[HasD]>;
 //defm FMAX_S : FPOps<"fmax.s", fmax, 0b11001, 0b00>, Requires<[HasD]>;
 
-//TODO: implement fma
+def FMADD_D : InstFP_Op<"fmadd.d", 0b1000011, 0b000, 0b01, (outs FP64:$dst), (ins FP64:$src1, FP64:$src2, FP64:$src3),
+  [(set FP64:$dst, (fma FP64:$src1, FP64:$src2, FP64:$src3))]>, Requires<[HasD]>;
 
 //Move and Conversions
 //The float to int conversions do nothing because fp_to_uint means RTZ specifically

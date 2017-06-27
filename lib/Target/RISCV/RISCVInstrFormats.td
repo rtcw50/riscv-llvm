@@ -67,6 +67,27 @@ class InstR<string mnemonic, bits<7> op, bits<7> funct7, bits<3> funct3,
   let Inst{6 - 0} = op;
 }
 
+
+// FP-Operation-Type
+class InstFP_Op<string mnemonic, bits<7> op, bits<3> rm, bits<2> s,
+           dag outs, dag ins,  list<dag> pattern>
+  : InstRISCV<4, outs, ins, mnemonic#"\t$dst, $src1, $src2, $src3", pattern> {
+  field bits<32> Inst;
+
+  bits<5> DST;
+  bits<5> RS1;
+  bits<5> RS2;
+  bits<5> RS3;
+
+  let Inst{31-25} = op;
+  let Inst{24-20} = DST;
+  let Inst{19-17} = rm;
+  let Inst{16-12} = RS1;
+  let Inst{11- 7} = RS2;
+  let Inst{6 - 5} = s;
+  let Inst{4 - 0} = RS3;
+}
+
 //LR/SC
 class InstLR<string mnemonic, bits<3> funct3,
              RegisterOperand cls1, Operand cls2>
